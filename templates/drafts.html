@@ -1,0 +1,9 @@
+{% extends "default_layout.html" %}
+
+{% block body %}
+{% for entry in all_blogs %}
+<p>{{entry.title}}| {{entry.datetime}} | <a href="url_for('edit', link={{entry.link}})">edit</a>|
+<a href="url_for('delete', link={{entry.link}})">delete</a></p>
+<!--TODO: add href to entry.title-->
+<!--TODO: add page control-->
+{% endblock %}

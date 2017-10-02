@@ -1,0 +1,82 @@
+{% extends "default_layout.html" %}
+
+{% block body %}
+
+        <!--<link rel="stylesheet" href="/static/editormd/examples/css/style.css" />-->
+        <link rel="stylesheet" href="/static/editormd/css/editormd.preview.css" />
+        <link rel="stylesheet" href="/static/editormd/css/editormd.css" />
+        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+        <div id="layout">
+            <header>
+                <h1>标题:<input id="title" value="{{title}}">.md</h1>
+            </header>
+            <div id="message" hidden></div>
+            <div><button id="save">存草稿</button><button id="publish">发表</button><a href="{{url_for('login')}}">返回</a></div>
+            <div id="test-editormd">
+                {% if md_path %}
+                <textarea>
+                </textarea>
+                {% endif %}
+            </div>
+        </div>
+        <script src="/static/editormd/examples/js/jquery.min.js"></script>
+        <script src="/static/editormd/editormd.min.js"></script>
+        <script type="text/javascript">
+            {% if md_path %}
+            $("textarea").load('/load_blog_md/{{md_path}}')
+            {% endif %}
+			var testEditor;
+			var check_legal = function (title){
+                    var pat = /\//;
+                    var n = title.search(pat);
+                    if(n>0){
+                        $("#message").text("文章标题不合法");
+                        $("#message").show();
+                        return false;
+                    }
+                    else{
+                        $("#message").text("");
+                        $("#message").hide();
+                        return true;
+                    }
+                };
+            $(function() {
+                testEditor = editormd("test-editormd", {
+                    width   : "90%",
+                    height  : 640,
+                    syncScrolling : true,
+                    path    : "/static/editormd/lib/",
+                    tex : true,
+                    saveHTMLToTextarea: true
+                });
+                var $date = "{{date}}";
+                $("button#save").bind('click',function(){
+                    var $md = testEditor.getMarkdown();
+                    var $sendform = {title: $("#title").val(), md: $md, date: $date};
+                    if (check_legal($("#title").val())){
+                        $.post("{{url_for('save')}}", $sendform, function(message){
+                            $("#message").text(message);
+                            $("#message").show("fast",function(){
+                                $("#message").delay(1000).hide("fast");
+                            });
+                        });
+                    }
+                });
+                $("button#publish").bind('click',function(){
+                    var $md = testEditor.getMarkdown();
+                    var $html = testEditor.getHTML();
+                    var $sendform = {title: $("#title").val(), md: $md, html: $html, date: $date};
+                    if (check_legal($("#title").val())){
+                        $.post("{{url_for('publish')}}", $sendform, function(redirect){
+                            window.location = redirect
+                        });
+                    }
+                });
+                $("button#gethtml").bind('click',function(){
+                    alert(testEditor.getHTML());
+
+                });
+            });
+        </script>
+
+{% endblock %}

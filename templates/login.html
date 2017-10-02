@@ -1,0 +1,11 @@
+{% extends "default_layout.html" %}
+
+{% block body %}
+<form action="{{url_for('login')}}" method="post">
+    user name <input type="text" name="uname">
+    <br/>
+    password <input type="password" name="password">
+    <!--TODO: MD5 encoding-->
+    <button onclick="submit">登陆</button>
+</form>
+{% endblock %}

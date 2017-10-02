@@ -1,0 +1,11 @@
+{% extends "default_layout.html" %}
+
+{% block body %}
+{% for item in link2title%}
+<div>
+    <a href="/blog_view/{{item.link}}">{{item.title}}</a> {{item.date[0]}}-{{item.date[1]}}-{{item.date[2]}}
+    <a href="{{url_for('edit',fpath=item.link)}}">编辑</a>
+    <a href="{{url_for('delete_blog',save_name=item.link)}}">删除</a>
+</div>
+{% endfor %}
+{% endblock %}

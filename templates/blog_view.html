@@ -1,0 +1,39 @@
+{% extends "default_layout.html" %}
+
+{% block body %}
+<link rel="stylesheet" href="/static/editormd/css/editormd.css" />
+<link rel="stylesheet" href="/static/editormd/css/editormd.preview.css" />
+<div>
+    <a href="{{url_for('edit',fpath=blog_path)}}">编辑</a>
+    <a href="{{url_for('delete_blog',save_name=blog_path)}}">删除</a>
+</div>
+<script src="/static/editormd/examples/js/jquery.min.js"></script>
+<script src="/static/editormd/lib/marked.min.js"></script>
+<script src="/static/editormd/lib/prettify.min.js"></script>
+<script src="/static/editormd/editormd.min.js"></script>
+<div id="blog_view">
+    <textarea id="blog_content"></textarea>
+</div>
+
+<script type="text/javascript">
+    var testEditor;
+    $(function(){
+    $.get("/load_blog_md/{{blog_path}}",function(md){
+        testEditor = editormd.markdownToHTML("blog_view", {
+                    markdown:md,
+                    width   : "90%",
+                    height  : 640,
+                    syncScrolling : true,
+                    path    : "/static/editormd/lib/",
+                    saveHTMLToTextarea: true,
+                    tex : true
+                });
+    });
+
+        //$("textarea#blog_content").load('load_blog_md/{{blog_path}}')
+        /*$.get("/get_blog_html/{{blog_path}}", function(blog_html){
+            $("div#blog_html").html(blog_html);
+        });*/
+    });
+</script>
+{% endblock %}
