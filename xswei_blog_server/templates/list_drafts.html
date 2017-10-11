@@ -1,0 +1,66 @@
+{% extends "default_layout.html" %}
+
+{% block body %}
+{#{% for item in link2title%}
+<div>
+    <a href="{{url_for('edit',fpath=item.link)}}">{{item.title}}</a> {{item.date[0]}}-{{item.date[1]}}-{{item.date[2]}}
+    <a href="{{url_for('edit',fpath=item.link)}}">编辑</a>
+    <a href="{{url_for('delete_drafts',save_name=item.link)}}">删除</a>
+</div>
+{% endfor %}
+#}
+<link rel="stylesheet" href="/static/css/pager.css">
+<script src="/static/js/pager.js"></script>
+<div id ="body">
+    <div id="blog_list"></div>
+    <div id="pager">
+        <ul class="pagination" id="page1"></ul>
+        <div class="pageJump">
+            <span>跳转到</span>
+            <input type="text"/>
+            <span>页</span>
+            <button type="button" class="button">确定</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function(){
+        $.getJSON("{{url_for('get_all_drafts')}}",function(details){
+
+            var len=details.length;
+            var pages=parseInt((len + 9) / 10) ;
+            if(pages==1){
+                $("#pager").empty();
+            }
+            for(var i=0;i<Math.min(len,10);i++){
+                var item = details[i];
+                $("#blog_list").append("<div>"
+                                    + "<a href='" + item.edit_link + "'>" + item.title + "</a>"
+                                    + item.Y + item.M + item.D
+                                    + "<a href='" + item.edit_link + "'>编辑</a>"
+                                    + "<a href='" + item.delete_link + "'>删除</a>"
+                                    + "</div>");
+            }
+            Page({
+                num: pages,
+                elem: $('#page1'),
+                callback: function(n) {
+                    $("#blog_list").empty();
+                    for(var i=10*(n-1);i<Math.min(10*n,len);i++){
+                    var item = details[i];
+                    $("#blog_list").append("<div><a href='/blog_view/"
+                                        + item.link
+                                        + "'>" + item.title + "</a>"
+                                        + item.Y + item.M + item.D
+                                        + "<a href='" + item.edit_link + "'>编辑</a>"
+                                        + "<a href='" + item.delete_link + "'>删除</a>"
+                                        + "</div>");
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
