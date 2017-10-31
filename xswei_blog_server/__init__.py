@@ -7,4 +7,4 @@ if not os.path.exists('./data_dir/drafts'):
     os.makedirs('./data_dir/drafts')
 if not os.path.exists('./data_dir/published'):
     os.makedirs('./data_dir/published')
-import xswei_blog_server.view, xswei_blog_server.api
+import xswei_blog_server.view, xswei_blog_server.api, xswei_blog_server.auth_view
