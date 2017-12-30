@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/static/editormd/css/editormd.css" />
 <link rel="stylesheet" href="/static/editormd/css/editormd.preview.css" />
 <div>
-    <a href="{{url_for('edit',fpath=blog_path)}}">编辑</a>
+    <a href="{{url_for('edit',fpath=blog_path, md_type='blog')}}">编辑</a>
     <a href="{{url_for('delete_blog',save_name=blog_path)}}">删除</a>
 </div>
 <script src="/static/editormd/examples/js/jquery.min.js"></script>
@@ -18,22 +18,17 @@
 <script type="text/javascript">
     var testEditor;
     $(function(){
-    $.get("/load_blog_md/{{blog_path}}",function(md){
-        testEditor = editormd.markdownToHTML("blog_view", {
-                    markdown:md,
-                    width   : "90%",
-                    height  : 640,
-                    syncScrolling : true,
-                    path    : "/static/editormd/lib/",
-                    saveHTMLToTextarea: true,
-                    tex : true
-                });
-    });
-
-        //$("textarea#blog_content").load('load_blog_md/{{blog_path}}')
-        /*$.get("/get_blog_html/{{blog_path}}", function(blog_html){
-            $("div#blog_html").html(blog_html);
-        });*/
+    $.get("{{ url_for('data_request', fpath=blog_path, md_type='blog') }}",function(md){
+            testEditor = editormd.markdownToHTML("blog_view", {
+                markdown:md,
+                width   : "90%",
+                height  : 640,
+                syncScrolling : true,
+                path    : "/static/editormd/lib/",
+                saveHTMLToTextarea: true,
+                tex : true
+            });
+        });
     });
 </script>
 {% endblock %}

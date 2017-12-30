@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Flask
+
+
 app = Flask(__name__)
 if not os.path.exists('./data_dir/drafts'):
     os.makedirs('./data_dir/drafts')

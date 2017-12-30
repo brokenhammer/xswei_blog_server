@@ -1,6 +1,9 @@
 from xswei_blog_server import app
 import os, json
 from flask import url_for
+from xswei_blog_server.utils import parse_path
+
+
 @app.route("/api/get_all_blogs")
 def get_all_blogs():
     years = os.listdir('data_dir/published')
@@ -21,7 +24,7 @@ def get_all_blogs():
         title = blog.split('/')[-1]
         pub_date = blog.split('/')[0:3]
         ret_list.append({'link':blog, 'title': title,
-                         'edit_link': url_for('edit',fpath=blog),
+                         'edit_link': url_for('edit',fpath=blog, md_type='blog'),
                          'delete_link': url_for('delete_blog',save_name=blog),
                          'Y': pub_date[0], 'M': pub_date[1], 'D': pub_date[2]})
     json_str=json.dumps(ret_list)
@@ -33,10 +36,10 @@ def get_all_drafts():
     ret_dict = []
     for save_name in file_list:
         save_name = os.path.splitext(save_name)[0]
-        pub_date = save_name.split('-')[0:3]
-        ret_dict.append({'link': save_name, 'title': save_name.split('-')[-1],
-                         'edit_link':url_for('edit',fpath=save_name),
+        y,m,d,title = parse_path(save_name, md_type='draft')
+        ret_dict.append({'link': save_name, 'title': title,
+                         'edit_link':url_for('edit',fpath=save_name, md_type='draft'),
                          'delete_link':url_for('delete_drafts',save_name=save_name),
-                         'Y': pub_date[0], 'M': pub_date[1], 'D': pub_date[2]})
+                         'Y': y, 'M': m, 'D': d})
     json_str=json.dumps(ret_dict)
     return json_str

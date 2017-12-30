@@ -24,7 +24,9 @@
             var pages=parseInt((len + 9) / 10) ;
             if(pages<=1){
                 $("#pager").empty();
-                $("#pager").text("一篇文章也没有，来写文章吧！");
+                if(len===0) {
+                    $("#pager").text("一篇文章也没有，来写文章吧！");
+                }
             }
             for(var i=0;i<Math.min(len,10);i++){
                 var item = details[i];

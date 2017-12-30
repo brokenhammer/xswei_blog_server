@@ -23,23 +23,12 @@
         <script src="/static/editormd/editormd.min.js"></script>
         <script type="text/javascript">
             {% if md_path %}
-            $("textarea").load('/load_blog_md/{{md_path}}')
+                $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}');
             {% endif %}
+            function check_legal(title) {
+                return true;
+            }
 			var testEditor;
-			var check_legal = function (title){
-                    var pat = /\//;
-                    var n = title.search(pat);
-                    if(n>0){
-                        $("#message").text("文章标题不合法");
-                        $("#message").show();
-                        return false;
-                    }
-                    else{
-                        $("#message").text("");
-                        $("#message").hide();
-                        return true;
-                    }
-                };
             $(function() {
                 testEditor = editormd("test-editormd", {
                     width   : "90%",

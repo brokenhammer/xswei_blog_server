@@ -1,18 +1,26 @@
 from xswei_blog_server import app
-from flask import render_template,request,redirect,url_for
+from flask import render_template,request,redirect,url_for,abort
 import os,datetime
 import urllib.parse
+from xswei_blog_server.utils import legal_path
+
+
 @app.route("/")
 def root():
     return redirect(url_for("list_blog"))
 
-@app.route("/load_blog_md/<path:fpath>")
-def data_request(fpath):
+@app.route("/load_blog_md/<md_type>/<path:fpath>")
+def data_request(fpath, md_type):
     fpath = urllib.parse.unquote(fpath)
-    if '-' in fpath: # drafts
+    fpath = legal_path(fpath, md_type)
+    if not fpath:
+        abort(404)
+    if md_type == 'draft':
         save_dir = 'data_dir/drafts/'
-    else: # published
+    elif md_type == 'blog':
         save_dir = 'data_dir/published/'
+    else:
+        abort(404)
     save_name = save_dir + fpath + '.md'
     with open(save_name,'r',encoding='utf-8') as f:
         return f.read()
