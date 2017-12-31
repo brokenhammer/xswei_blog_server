@@ -18,15 +18,24 @@
 
 <script>
     $(function(){
-        $.getJSON("{{url_for('get_all_blogs')}}",function(details){
-
-            var len=details.length;
+        $.getJSON("{{url_for('get_all_blogs')}}",function(raw_details){
+            var len=raw_details.length;
             var pages=parseInt((len + 9) / 10) ;
             if(pages<=1){
                 $("#pager").empty();
                 if(len===0) {
                     $("#pager").text("一篇文章也没有，来写文章吧！");
                 }
+            }
+            var details = [];
+            for (var i in raw_details){
+                var raw_item = raw_details[i];
+                var parsed_list = raw_item.split('/');
+                details.push({"link":raw_item,"title":parsed_list[3],"Y":parsed_list[0],
+                                "M":parsed_list[1],"D":parsed_list[2],
+                                "edit_link":"edit/blog/"+raw_item,
+                                "delete_link":"delete_blog/"+raw_item});
+                //TODO:use url generator rather than manually typed url
             }
             for(var i=0;i<Math.min(len,10);i++){
                 var item = details[i];
