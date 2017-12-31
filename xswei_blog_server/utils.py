@@ -17,6 +17,15 @@ def legal_path(fpath, md_type):
     else:
         return None
 
+def full_path(fpath, md_type, config):
+    if md_type == 'blog':
+        root = config['BLOGS_DIR']
+        fpath = legal_path(fpath, md_type)
+        return os.path.join(root, fpath)
+    elif md_type == 'draft':
+        root = config['DRAFTS_DIR']
+        return os.path.join(root, fpath)
+
 def parse_path(fpath, md_type):
     if not legal_path(fpath, md_type):
         return None
@@ -51,34 +60,46 @@ def del_item(jsonpath,fpath):
     with open(jsonpath, 'w', encoding='utf-8') as f:
         json.dump(records, f)
 
-def sysn_jsonDB_drafts(jsonpath):
-    file_list = os.listdir('data_dir/drafts')
+def sysn_jsonDB_drafts(config):
+    file_list = os.listdir(config['DRAFTS_DIR'])
     records = []
-    with open(jsonpath, 'w', encoding='utf-8') as j:
+    with open(config['DRAFTS_INDEX'], 'w', encoding='utf-8') as j:
         for save_name in file_list:
             if os.path.splitext(save_name)[1] == '.md':
                 save_name = os.path.splitext(save_name)[0]
                 records.append(save_name)
         json.dump(records, j)
 
-def sync_jsonDB_published(jsonpath):
-    years = os.listdir('data_dir/published')
+def sync_jsonDB_published(config):
+    years = os.listdir(config['BLOGS_DIR'])
     blog_list = []
     for y in years:
-        months = os.listdir('data_dir/published/{}'.format(y))
+        if not os.path.isdir('{}/{}'.format(config['BLOGS_DIR'],y)):
+            continue
+        months = os.listdir('{}/{}'.format(config['BLOGS_DIR'],y))
         for m in months:
-            days = os.listdir('data_dir/published/{}/{}'.format(y, m))
+            days = os.listdir('{}/{}/{}'.format(config['BLOGS_DIR'], y, m))
             for d in days:
-                flist = os.listdir('data_dir/published/{}/{}/{}'.format(y, m, d))
+                flist = os.listdir('{}/{}/{}/{}'.format(config['BLOGS_DIR'], y, m, d))
                 for f in flist:
-                    if os.path.splitext(f)[1] == '.md':
-                        title = os.path.splitext(f)[0]
-                        blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
+                    #if os.path.splitext(f)[1] == '.md':
+                    title = f
+                    blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
+    #TODO: os.walk(). and fix the find path module with os, not only by split('/')
     records=[]
-    with open(jsonpath, 'w', encoding='utf-8') as j:
+
+    with open(config['BLOGS_INDEX'], 'w', encoding='utf-8') as j:
         for save_name in blog_list:
             if os.path.splitext(save_name)[1] == '.md':
                 save_name = os.path.splitext(save_name)[0]
                 records.append(save_name)
         json.dump(records, j)
+
+def before_run(config):
+    if not os.path.exists(config['DRAFTS_DIR']):
+        os.makedirs(config['DRAFTS_DIR'])
+    if not os.path.exists(config['BLOGS_DIR']):
+        os.makedirs(config['BLOGS_DIR'])
+    sysn_jsonDB_drafts(config)
+    sync_jsonDB_published(config)
 

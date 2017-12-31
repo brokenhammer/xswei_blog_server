@@ -2,17 +2,12 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Flask
-import json
+from xswei_blog_server.utils import sync_jsonDB_published, sysn_jsonDB_drafts, before_run
 
-app = Flask(__name__)
-if not os.path.exists('./data_dir/drafts'):
-    os.makedirs('./data_dir/drafts')
-if not os.path.exists('./data_dir/published'):
-    os.makedirs('./data_dir/published')
-if not os.path.exists('./data_dir/published/index.json'):
-    with open('./data_dir/published/index.json', 'w') as j:
-        json.dump([], j)
-if not os.path.exists('./data_dir/drafts/index.json'):
-    with open('./data_dir/drafts/index.json', 'w') as j:
-        json.dump([], j)
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object('config')
+app.config.from_pyfile('config.py')
+app.config['WORK_DIR'] = os.getcwd()
+before_run(app.config)
+
 import xswei_blog_server.view, xswei_blog_server.api, xswei_blog_server.auth_view
