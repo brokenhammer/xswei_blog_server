@@ -1,4 +1,4 @@
-from xswei_blog_server import app
+from blog_server import app
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@
                 <h1>标题:<input id="title" value="{{title}}">.md</h1>
             </header>
             <div id="message" hidden></div>
-            <div><button id="save">存草稿</button><button id="publish">发表</button><a href="{{url_for('login')}}">返回</a></div>
+            <div><button id="save">存草稿</button><button id="publish">发表</button><a href="{{url_for('root')}}">返回</a></div>
             <div id="test-editormd">
                 {% if md_path %}
                 <textarea>

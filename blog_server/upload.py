@@ -1,4 +1,4 @@
-from xswei_blog_server import app
+from blog_server import app
 import json
 
 @app.route('/upload_img', methods=["POST"])

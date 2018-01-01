@@ -1,7 +1,7 @@
-from xswei_blog_server import app
+from blog_server import app
 from flask import render_template,redirect,url_for,abort
 import urllib.parse
-from xswei_blog_server.utils import legal_path, full_path
+from blog_server.utils import legal_path, full_path
 
 
 @app.route("/")

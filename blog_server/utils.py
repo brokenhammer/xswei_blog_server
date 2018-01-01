@@ -17,6 +17,12 @@ def legal_path(fpath, md_type):
     else:
         return None
 
+def construct_fpath(title, y, m, d, md_type):
+    if md_type == 'draft':
+        return legal_path('{}-{}-{}-{}'.format(y,m,d,title), md_type)
+    elif md_type == 'blog':
+        return legal_path('{}/{}/{}/{}'.format(y,m,d,title), md_type)
+
 def full_path(fpath, md_type, config):
     if md_type == 'blog':
         root = config['BLOGS_DIR']
@@ -71,28 +77,35 @@ def sysn_jsonDB_drafts(config):
         json.dump(records, j)
 
 def sync_jsonDB_published(config):
-    years = os.listdir(config['BLOGS_DIR'])
     blog_list = []
-    for y in years:
-        if not os.path.isdir('{}/{}'.format(config['BLOGS_DIR'],y)):
-            continue
-        months = os.listdir('{}/{}'.format(config['BLOGS_DIR'],y))
-        for m in months:
-            days = os.listdir('{}/{}/{}'.format(config['BLOGS_DIR'], y, m))
-            for d in days:
-                flist = os.listdir('{}/{}/{}/{}'.format(config['BLOGS_DIR'], y, m, d))
-                for f in flist:
-                    #if os.path.splitext(f)[1] == '.md':
-                    title = f
-                    blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
-    #TODO: os.walk(). and fix the find path module with os, not only by split('/')
+    for root, dirs, flist in os.walk(config['BLOGS_DIR']):
+        for fname in flist:
+            if fname.endswith('.md'):
+                title = os.path.splitext(fname)[0]
+                dir_name = root.replace('\\','/')
+                y, m, d = dir_name.split('/')[-3:]
+                blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
+                print(blog_list)
+
+    # years = os.listdir(config['BLOGS_DIR'])
+    # blog_list = []
+    # for y in years:
+    #     if not os.path.isdir('{}/{}'.format(config['BLOGS_DIR'],y)):
+    #         continue
+    #     months = os.listdir('{}/{}'.format(config['BLOGS_DIR'],y))
+    #     for m in months:
+    #         days = os.listdir('{}/{}/{}'.format(config['BLOGS_DIR'], y, m))
+    #         for d in days:
+    #             flist = os.listdir('{}/{}/{}/{}'.format(config['BLOGS_DIR'], y, m, d))
+    #             for f in flist:
+    #                 #if os.path.splitext(f)[1] == '.md':
+    #                 title = f
+    #                 blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
     records=[]
 
     with open(config['BLOGS_INDEX'], 'w', encoding='utf-8') as j:
         for save_name in blog_list:
-            if os.path.splitext(save_name)[1] == '.md':
-                save_name = os.path.splitext(save_name)[0]
-                records.append(save_name)
+            records.append(save_name)
         json.dump(records, j)
 
 def before_run(config):
@@ -102,4 +115,14 @@ def before_run(config):
         os.makedirs(config['BLOGS_DIR'])
     sysn_jsonDB_drafts(config)
     sync_jsonDB_published(config)
+    create_root(config)
+
+def create_root(config):
+    from flask.ext.login import UserMixin
+    import pickle
+    root_user = UserMixin()
+    root_user.id = 1
+    with open(config['ROOT_FILE'], 'wb') as f:
+        pickle.dump(root_user, f)
+
 
