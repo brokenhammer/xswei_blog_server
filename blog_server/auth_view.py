@@ -100,7 +100,6 @@ def publish():
             mdf.write(md)
         add_item(app.config['BLOGS_INDEX'], fpath)
         full_draft_path = full_path(draft_path, 'draft', app.config)
-        print(full_draft_path)
         if os.path.exists(full_draft_path + '.md'):
             os.remove(full_draft_path + '.md')
         del_item(app.config['DRAFTS_INDEX'], draft_path)
