@@ -45,7 +45,8 @@
             for(var i=0;i<Math.min(len,10);i++){
                 var item = details[i];
                 $("#blog_list").append("<div>"
-                                    + "<a href='" + item.edit_link + "'>" + item.title + "</a>"
+                                    //+ "<a href='" + item.edit_link + "'>" + item.title + "</a>"
+                                    + "<a href='/blog_view/draft/" + item.link + "'>" + item.title + "</a>"
                                     + item.Y + item.M + item.D
                                     + "<a href='" + item.edit_link + "'>编辑</a>"
                                     + "<a href='" + item.delete_link + "'>删除</a>"

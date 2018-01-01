@@ -4,8 +4,12 @@
 <link rel="stylesheet" href="/static/editormd/css/editormd.css" />
 <link rel="stylesheet" href="/static/editormd/css/editormd.preview.css" />
 <div>
-    <a href="{{url_for('edit',fpath=blog_path, md_type='blog')}}">编辑</a>
-    <a href="{{url_for('delete_blog',save_name=blog_path)}}">删除</a>
+    <a href="{{url_for('edit',fpath=fpath, md_type=md_type)}}">编辑</a>
+    {% if md_type =='blog' %}
+        <a href="{{url_for('delete_blog',fpath=fpath)}}">删除</a>
+    {% else %}
+        <a href="{{url_for('delete_draft',fpath=fpath)}}">删除</a>
+    {% endif %}
 </div>
 <script src="/static/editormd/examples/js/jquery.min.js"></script>
 <script src="/static/editormd/lib/marked.min.js"></script>
@@ -18,7 +22,7 @@
 <script type="text/javascript">
     var testEditor;
     $(function(){
-    $.get("{{ url_for('data_request', fpath=blog_path, md_type='blog') }}",function(md){
+    $.get("{{ url_for('data_request', fpath=fpath, md_type=md_type) }}",function(md){
             testEditor = editormd.markdownToHTML("blog_view", {
                 markdown:md,
                 width   : "90%",

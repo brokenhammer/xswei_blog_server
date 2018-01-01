@@ -9,7 +9,6 @@ app.config.from_object('config')
 app.config['WORK_DIR'] = os.getcwd()
 if os.path.exists('instance/config.py'):
     app.config.from_pyfile('config.py')
-
 before_run(app.config)
 
 import blog_server.view, blog_server.api, blog_server.auth_view, blog_server.upload

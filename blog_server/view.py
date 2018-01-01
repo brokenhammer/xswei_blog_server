@@ -27,6 +27,6 @@ def list_drafts():
 def list_blog():
     return render_template('list_blog.html')
 
-@app.route("/blog_view/<path:fpath>")
-def blog_view(fpath):
-    return render_template('blog_view.html',blog_path=fpath)
+@app.route("/blog_view/<md_type>/<path:fpath>")
+def blog_view(fpath,md_type):
+    return render_template('blog_view.html',fpath=fpath, md_type=md_type)

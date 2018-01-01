@@ -1,6 +1,10 @@
 import os
 import json
-
+import uuid
+from urllib.parse import urlparse
+from want import Want
+import time
+import hashlib
 
 def legal_path(fpath, md_type):
     if md_type == 'blog':
@@ -85,28 +89,9 @@ def sync_jsonDB_published(config):
                 dir_name = root.replace('\\','/')
                 y, m, d = dir_name.split('/')[-3:]
                 blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
-                print(blog_list)
-
-    # years = os.listdir(config['BLOGS_DIR'])
-    # blog_list = []
-    # for y in years:
-    #     if not os.path.isdir('{}/{}'.format(config['BLOGS_DIR'],y)):
-    #         continue
-    #     months = os.listdir('{}/{}'.format(config['BLOGS_DIR'],y))
-    #     for m in months:
-    #         days = os.listdir('{}/{}/{}'.format(config['BLOGS_DIR'], y, m))
-    #         for d in days:
-    #             flist = os.listdir('{}/{}/{}/{}'.format(config['BLOGS_DIR'], y, m, d))
-    #             for f in flist:
-    #                 #if os.path.splitext(f)[1] == '.md':
-    #                 title = f
-    #                 blog_list.append('{}/{}/{}/{}'.format(y, m, d, title))
-    records=[]
 
     with open(config['BLOGS_INDEX'], 'w', encoding='utf-8') as j:
-        for save_name in blog_list:
-            records.append(save_name)
-        json.dump(records, j)
+        json.dump(blog_list, j)
 
 def before_run(config):
     if not os.path.exists(config['DRAFTS_DIR']):
@@ -124,5 +109,48 @@ def create_root(config):
     root_user.id = 1
     with open(config['ROOT_FILE'], 'wb') as f:
         pickle.dump(root_user, f)
+
+def same_host(requested, good):
+    parsed_requested = urlparse(requested)
+    parsed_good = urlparse(good)
+
+    if not (parsed_good.scheme == parsed_requested.scheme and
+            parsed_good.netloc == parsed_requested.netloc):
+        return False
+    return True
+
+def allowed_file(filename, ALLOWED_EXTENSIONS):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+def upload_want(file, ext, config):
+    filename = file.filename
+    content = file.read()
+    img_name = str(uuid.uuid4())
+    full_name = '.'.join((img_name, ext))
+    ws = Want(config['WANT_AK'], config['WANT_PK'])
+    # 正常策略
+    ps = {'detectMime': 1, 'expiration': int(time.time()*1000) + 3600 *1000, 'insertOnly': 0,
+          'namespace': config['WANT_NAMESPACE'], 'sizeLimit': 0}
+    upload_msg =  ws.upload_content(ps, config['WANT_DIR'], full_name, content)
+    if upload_msg['code'] == 200:
+        return upload_msg['name']
+    return None
+
+def want_url(img_name, config):
+
+    width = '600'
+    prefix = config['WANT_NAMESPACE']
+    img_pk = config['WANT_IMG_PK']
+    URI = '/{}/{}@{}w_1l'.format(config['WANT_DIR'], img_name, width)
+    expiration = str(int(time.time() + 3600))
+    rand = uid = '0'
+    sstring = '-'.join((URI, expiration, rand, uid, img_pk))
+    m5 = hashlib.md5()
+    m5.update(sstring.encode())
+    md5hash = m5.hexdigest()
+    return 'http://{}.image.alimmdn.com{}?auth_key={}-{}-{}-{}'.format(prefix, URI, expiration, rand, uid, md5hash)
+
+
 
 

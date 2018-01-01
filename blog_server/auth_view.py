@@ -29,7 +29,7 @@ def load_user(user_id):
 @app.route("/login",methods=["GET","POST"])
 def login():
     if request.method=="POST":
-        if request.form['uname']=='root' and request.form['password']=='aptx4869':
+        if request.form['uname']==app.config['ROOT_NAME'] and request.form['password']==app.config['ROOT_PSWD']:
             remember = True if 'remember' in request.form else False
             with open(app.config['ROOT_FILE'], 'rb') as f:
                 _root_user = pickle.load(f)
