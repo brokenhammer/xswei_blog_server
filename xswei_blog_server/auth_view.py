@@ -8,7 +8,7 @@ from xswei_blog_server.utils import (legal_path,parse_path,del_item,
 import pickle
 
 # login settings=========================
-#app.secret_key = '2A3dd9df.}-'
+
 login_manager = LoginManager()
 login_manager.session_protection = 'basic'
 login_manager.login_message="请登录"
