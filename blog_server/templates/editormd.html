@@ -3,8 +3,8 @@
 {% block body %}
 
         <!--<link rel="stylesheet" href="/static/editormd/examples/css/style.css" />-->
-        <link rel="stylesheet" href="/static/editormd/css/editormd.preview.css" />
-        <link rel="stylesheet" href="/static/editormd/css/editormd.css" />
+        <link rel="stylesheet" href="https://pandao.github.io/editor.md/css/editormd.preview.css" />
+        <link rel="stylesheet" href="https://pandao.github.io/editor.md/css/editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
         <div id="layout">
             <header>
@@ -19,8 +19,8 @@
                 {% endif %}
             </div>
         </div>
-        <script src="/static/editormd/examples/js/jquery.min.js"></script>
-        <script src="/static/editormd/editormd.min.js"></script>
+<!--        <script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>-->
+        <script src="https://pandao.github.io/editor.md/editormd.min.js"></script>
         <script type="text/javascript">
             {% if md_path %}
                 $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}');
