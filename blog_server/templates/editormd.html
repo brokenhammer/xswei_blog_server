@@ -22,14 +22,12 @@
 <!--        <script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>-->
         <script src="https://pandao.github.io/editor.md/editormd.min.js"></script>
         <script type="text/javascript">
-            {% if md_path %}
-                $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}');
-            {% endif %}
+
             function check_legal(title) {
                 return true;
             }
-			var testEditor;
-            $(function() {
+            {% if md_path %}
+                $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}', function() {
                 testEditor = editormd("test-editormd", {
                     width   : "90%",
                     height  : 640,
@@ -52,6 +50,9 @@
                         //this.resize("100%", 640);
                     }
                 });
+            {% endif %}
+			var testEditor;
+            $();
                 var $date = "{{date}}";
                 $("button#save").bind('click',function(){
                     var $md = testEditor.getMarkdown();
