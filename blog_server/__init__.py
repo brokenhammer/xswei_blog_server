@@ -3,8 +3,11 @@
 import os
 from flask import Flask
 from blog_server.utils import sync_jsonDB_published, sysn_jsonDB_drafts, before_run
+from flask_cors import CORS
+
 
 app = Flask(__name__, instance_relative_config=True)
+CORS(app)
 app.config.from_object('config')
 app.config['WORK_DIR'] = os.getcwd()
 if os.path.exists('instance/config.py'):

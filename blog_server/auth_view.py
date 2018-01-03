@@ -1,7 +1,7 @@
 from blog_server import app
 import os, json, datetime
 from flask import url_for,request,redirect,render_template,abort,flash
-from flask.ext.login import (LoginManager, login_required,
+from flask_login import (LoginManager, login_required,
                                login_user, logout_user,UserMixin)
 from blog_server.utils import (legal_path, parse_path, del_item,
                                add_item, full_path, construct_fpath)
