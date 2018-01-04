@@ -5,7 +5,7 @@
 <script src="/static/js/pager.js"></script>
 <div id ="body">
     <div id="blog_list"></div>
-    <div id="pager">
+    <div hidden id="pager">
         <ul class="pagination" id="page1"></ul>
         <div class="pageJump">
             <span>跳转到</span>
@@ -21,12 +21,14 @@
         $.getJSON("{{url_for('get_all_blogs')}}",function(raw_details){
             var len=raw_details.length;
             var pages=parseInt((len + 9) / 10) ;
-            if(pages<=1){
-                $("#pager").empty();
-                if(len===0) {
-                    $("#pager").text("一篇文章也没有，来写文章吧！");
-                }
+            if(len===0) {
+                $("#pager").text("一篇文章也没有，来写文章吧！");
+                $("#pager").show();
             }
+            if(pages>=2){
+                $("#pager").show();
+            };
+
             var details = [];
             for (var i in raw_details){
                 var raw_item = raw_details[i];
