@@ -103,7 +103,7 @@ def before_run(config):
     create_root(config)
 
 def create_root(config):
-    from flask.ext.login import UserMixin
+    from flask_login import UserMixin
     import pickle
     root_user = UserMixin()
     root_user.id = 1
