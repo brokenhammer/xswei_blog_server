@@ -26,6 +26,7 @@
             function check_legal(title) {
                 return true;
             }
+            var testEditor;
             function init_editor() {
                 testEditor = editormd("test-editormd", {
                     width: "90%",
@@ -51,13 +52,34 @@
                 })
             }
             {% if md_path %}
-                $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}', init_editor());
+                $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}', function () {
+                testEditor = editormd("test-editormd", {
+                    width: "90%",
+                    height: 640,
+                    syncScrolling: true,
+                    path: "/static/editormd/lib/",
+                    tex: true,
+                    saveHTMLToTextarea: true,
+                    imageUpload: true,
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL: "{{ url_for('upload_img') }}",
+                    onload: function () {
+                        console.log('onload', this);
+                        //this.fullscreen();
+                        //this.unwatch();
+                        //this.watch().fullscreen();
+
+                        //this.setMarkdown("#PHP");
+                        //this.width("100%");
+                        //this.height(480);
+                        //this.resize("100%", 640);
+                    }
+                })
+            });
             {% else %}
                 init_editor();
             {% endif %}
 
-			var testEditor;
-            $();
                 var $date = "{{date}}";
                 $("button#save").bind('click',function(){
                     var $md = testEditor.getMarkdown();
