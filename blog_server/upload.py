@@ -15,7 +15,7 @@ def upload_img():
         extension = filename.rsplit('.', 1)[1]
         upload_name = upload_want(file, extension, app.config)
         if upload_name: # success
-            ret_json = {'success':1, 'message':'received', 'url': url_for('serve_img', img_name=upload_name)}
+            ret_json = {'success':1, 'message':'received', 'url': url_for('serve_img', _external=True, img_name=upload_name)}
     else:
         ret_json['message'] = 'Failed!'
     json_str = json.dumps(ret_json)
