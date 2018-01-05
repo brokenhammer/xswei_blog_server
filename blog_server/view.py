@@ -1,7 +1,7 @@
 from blog_server import app
 from flask import render_template,redirect,url_for,abort
 import urllib.parse
-from blog_server.utils import legal_path, full_path
+from blog_server.utils import legal_path, full_path, parse_path
 
 
 @app.route("/")
@@ -21,12 +21,17 @@ def data_request(fpath, md_type):
 
 @app.route("/list_drafts")
 def list_drafts():
-    return render_template('list_drafts.html')
+    return render_template('list_drafts.html',title="所有草稿")
 
 @app.route("/list_blog")
 def list_blog():
-    return render_template('list_blog.html')
+    return render_template('list_blog.html',title="所有文章")
 
 @app.route("/blog_view/<md_type>/<path:fpath>")
 def blog_view(fpath,md_type):
-    return render_template('blog_view.html',fpath=fpath, md_type=md_type)
+    fpath = legal_path(fpath, md_type)
+    if not fpath:
+        abort(404)
+    y, m, d, title = parse_path(fpath, md_type)
+    return render_template('blog_view.html',fpath=fpath, md_type=md_type,
+                           title=title)
