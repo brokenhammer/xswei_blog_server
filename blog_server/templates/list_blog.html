@@ -19,6 +19,7 @@
 <script>
     $(function(){
         $.getJSON("{{url_for('get_all_blogs')}}",function(raw_details){
+            raw_details.sort().reverse();
             var len=raw_details.length;
             var pages=parseInt((len + 9) / 10) ;
             if(len===0) {
