@@ -20,7 +20,7 @@
             </div>
         </div>
 <!--        <script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>-->
-        <script src="https://pandao.github.io/editor.md/editormd.min.js"></script>
+        <script src="/static/editormd/editormd.js"></script>
         <script type="text/javascript">
 
             function check_legal(title) {
@@ -38,22 +38,13 @@
                     imageUpload: true,
                     imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                     imageUploadURL: "{{ url_for('upload_img') }}",
-                    onload: function () {
-                        console.log('onload', this);
-                        //this.fullscreen();
-                        //this.unwatch();
-                        //this.watch().fullscreen();
-
-                        //this.setMarkdown("#PHP");
-                        //this.width("100%");
-                        //this.height(480);
-                        //this.resize("100%", 640);
-                    }
-                })
+                    //htmlDecode : true,
+                    htmlDecode : "style,script,iframe,sub,sup|on*"
+                });
             }
             {% if md_path %}
                 $("textarea").load('{{ url_for("data_request", fpath=md_path, md_type=md_type) }}', function () {
-                testEditor = editormd("test-editormd", {
+                /*testEditor = editormd("test-editormd", {
                     width: "90%",
                     height: 640,
                     syncScrolling: true,
@@ -64,7 +55,7 @@
                     imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                     imageUploadURL: "{{ url_for('upload_img') }}",
                     onload: function () {
-                        console.log('onload', this);
+                        //console.log('onload', this);
                         //this.fullscreen();
                         //this.unwatch();
                         //this.watch().fullscreen();
@@ -74,7 +65,8 @@
                         //this.height(480);
                         //this.resize("100%", 640);
                     }
-                })
+                });*/
+                init_editor();
             });
             {% else %}
                 init_editor();

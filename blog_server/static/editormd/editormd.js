@@ -1501,7 +1501,6 @@
             this.previewContainer.find("." + editormd.classNames.tex).each(function(){
                 var tex  = $(this);
                 editormd.$katex.render(tex.text(), tex[0]);
-                
                 tex.find(".katex").css("font-size", "1.6em");
             });   
 
@@ -4015,7 +4014,7 @@
             var katexHandle = function() {
                 div.find("." + editormd.classNames.tex).each(function(){
                     var tex  = $(this);                    
-                    katex.render(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"), tex[0]);                    
+                    katex.render(tex.html().replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">"), tex[0]);
                     tex.find(".katex").css("font-size", "1.6em");
                 });
             };
@@ -4179,8 +4178,8 @@
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL  = {
-        css : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min",
-        js  : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min"
+	css : "//khan.github.io/KaTeX/bower_components/katex/dist/katex.min",
+        js  : "//khan.github.io/KaTeX/bower_components/katex/dist/katex.min"
     };
     
     editormd.kaTeXLoaded = false;
