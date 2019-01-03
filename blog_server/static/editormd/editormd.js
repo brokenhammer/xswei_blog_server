@@ -4178,8 +4178,8 @@
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL  = {
-	css : "//khan.github.io/KaTeX/bower_components/katex/dist/katex.min",
-        js  : "//khan.github.io/KaTeX/bower_components/katex/dist/katex.min"
+        css : "//unpkg.com/katex@0.9.0/dist/katex.min",
+        js  : "//unpkg.com/katex@0.9.0/dist/katex.min"
     };
     
     editormd.kaTeXLoaded = false;
