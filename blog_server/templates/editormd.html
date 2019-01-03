@@ -12,7 +12,6 @@
             </header>
             <div id="message" hidden></div>
             <div><button id="save">存草稿</button><button id="publish">发表</button><a href="{{url_for('root')}}">返回</a></div>
-            <div><button id="gethtml">获得html</button></div>
             <div id="dummy-viewer"></div>
             <div id="test-editormd">
                 {% if md_path %}
@@ -87,19 +86,6 @@
                         });
                     }
                 });
-                $("button#gethtml").bind('click',function(){
-                    var $md = testEditor.getMarkdown();
-                    $("#dummy-viewer").html('');
-                    testViewer = editormd.markdownToHTML("dummy-viewer",{
-                        markdown: $md,
-                        htmlDecode : "style,script,iframe,sub,sup|on*",
-                        tex: true,
-                        tocm: true,
-                        emoji:true
-                    });
-                    var $rawhtml = $("#dummy-viewer").html();
-                    console.log($rawhtml);
-                });
                 $("button#publish").bind('click',function(){
                     var $md = testEditor.getMarkdown();
                     $("#dummy-viewer").html('');
@@ -110,6 +96,7 @@
                         tocm: true,
                         emoji:true
                     });
+                    $("#test-editormd").hide();
                     var $rawhtml = $("#dummy-viewer").html();
                     var $sendform = {title: $("#title").val(), md: $md, html: $rawhtml, date: $date};
                     if (check_legal($("#title").val())){
