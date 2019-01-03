@@ -95,9 +95,12 @@ def publish():
         os.makedirs(save_dir)
     draft_path = construct_fpath(title, y, m, d, md_type='draft')
     md = request.form['md']
+    html = request.form['html']
     try:
         with open(full_fpath + '.md', 'w', encoding='utf-8') as mdf:
             mdf.write(md)
+        with open(full_fpath + '.html', 'w', encoding='utf-8') as htmlf:
+            htmlf.write(html)
         add_item(app.config['BLOGS_INDEX'], fpath)
         full_draft_path = full_path(draft_path, 'draft', app.config)
         if os.path.exists(full_draft_path + '.md'):

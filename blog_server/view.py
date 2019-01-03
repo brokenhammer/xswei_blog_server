@@ -19,6 +19,17 @@ def data_request(fpath, md_type):
     with open(full_fname,'r',encoding='utf-8') as f:
         return f.read()
 
+@app.route("/load_blog_html/<path:fpath>")
+def html_request(fpath):
+    fpath = urllib.parse.unquote(fpath)
+    fpath = legal_path(fpath, 'blog')
+    if not fpath:
+        abort(404)
+    full_fpath = full_path(fpath, 'blog', app.config)
+    full_fname = full_fpath + '.html'
+    with open(full_fname, 'r', encoding='utf-8') as f:
+        return f.read()
+
 @app.route("/list_drafts")
 def list_drafts():
     return render_template('list_drafts.html',title="所有草稿")
