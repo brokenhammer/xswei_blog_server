@@ -110,14 +110,14 @@ def create_root(config):
     with open(config['ROOT_FILE'], 'wb') as f:
         pickle.dump(root_user, f)
 
-def same_host(requested, good):
+def same_host(requested, goods):
     parsed_requested = urlparse(requested)
-    parsed_good = urlparse(good)
-
-    if not (parsed_good.scheme == parsed_requested.scheme and
+    for g in goods:
+        parsed_good = urlparse(g)
+        if (parsed_good.scheme == parsed_requested.scheme and
             parsed_good.netloc == parsed_requested.netloc):
-        return False
-    return True
+            return True
+    return False
 
 def allowed_file(filename, ALLOWED_EXTENSIONS):
     return '.' in filename and \
