@@ -24,8 +24,9 @@ def upload_img():
 
 @app.route('/blog_img/<img_name>')
 def serve_img(img_name):
-    good_referrer = ['http://{}/'.format(request.host),
+    good_referrer = ['https://{}/'.format(request.host),
                      'https://brokenhammer.github.io/']
+    print(request.referrer, request.host)
     if not (request.referrer and same_host(request.referrer, good_referrer)):
         return redirect('https://www.baidu.com/img/baidu_jgylogo3.gif') #fake image
     url = want_url(img_name, app.config)

@@ -149,7 +149,7 @@ def want_url(img_name, config):
     m5 = hashlib.md5()
     m5.update(sstring.encode())
     md5hash = m5.hexdigest()
-    return 'http://{}.image.alimmdn.com{}?auth_key={}-{}-{}-{}'.format(prefix, URI, expiration, rand, uid, md5hash)
+    return 'https://{}.image.alimmdn.com{}?auth_key={}-{}-{}-{}'.format(prefix, URI, expiration, rand, uid, md5hash)
 
 
 
