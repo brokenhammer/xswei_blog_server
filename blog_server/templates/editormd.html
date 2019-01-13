@@ -96,6 +96,8 @@
                         emoji:true
                     });
                     $("#test-editormd").hide();
+                    var hid_list = document.querySelectorAll(".katex-mathml");
+                    hid_list.forEach(function(hid){hid.setAttribute("hidden", true)})
                     var $rawhtml = $("#dummy-viewer").html();
                     var $sendform = {title: $("#title").val(), md: $md, html: $rawhtml, date: $date};
                     if (check_legal($("#title").val())){
